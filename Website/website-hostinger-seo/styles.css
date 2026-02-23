@@ -39,6 +39,41 @@ body {
   padding: 1.1rem 0 2.2rem;
 }
 
+.locale-switch {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.35rem;
+  margin-bottom: 0.52rem;
+}
+
+.locale-link {
+  border: 1px solid #d7e0f0;
+  border-radius: 999px;
+  background: #ffffff;
+  color: #37537e;
+  text-decoration: none;
+  font-size: 0.72rem;
+  font-weight: 700;
+  line-height: 1;
+  padding: 0.34rem 0.64rem;
+  min-height: 32px;
+  display: inline-flex;
+  align-items: center;
+}
+
+.locale-link:hover,
+.locale-link:focus-visible {
+  border-color: #b8c9e6;
+  background: #f3f7ff;
+}
+
+.locale-link.active {
+  border-color: #374151;
+  background: #374151;
+  color: #ffffff;
+}
+
 h1,
 h2,
 h3,
@@ -1085,6 +1120,11 @@ select:focus {
   .site-shell {
     width: min(97vw, 470px);
     padding: 0.72rem 0 1.55rem;
+  }
+
+  .locale-switch {
+    justify-content: center;
+    margin-bottom: 0.44rem;
   }
 
   .hero-sub {

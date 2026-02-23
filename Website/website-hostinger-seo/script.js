@@ -148,6 +148,68 @@ const categories = [
   }
 ];
 
+const IS_ES = document.documentElement.lang.toLowerCase().startsWith("es");
+const QUICK_CONNECTOR = IS_ES ? "a" : "to";
+
+const CATEGORY_I18N = {
+  length: {
+    label: "Longitud",
+    subtitle: "Conversión rápida y precisa para medidas de longitud.",
+    tip: "Cambia entre unidades métricas e imperiales sin salir de este panel."
+  },
+  weight: {
+    label: "Peso",
+    subtitle: "Convierte unidades de masa para cocina, envíos e ingeniería.",
+    tip: "Usa kilogramos para flujos SI y libras/onzas para tareas imperiales."
+  },
+  volume: {
+    label: "Volumen",
+    subtitle: "Conversión confiable de líquidos y volúmenes de recipientes.",
+    tip: "Usa litros y mililitros para precisión; tazas y galones para recetas."
+  },
+  temperature: {
+    label: "Temperatura",
+    subtitle: "Conversión instantánea de temperatura con fórmulas estándar.",
+    tip: "La temperatura es no lineal; las fórmulas se adaptan automáticamente."
+  },
+  currency: {
+    label: "Moneda",
+    subtitle: "Tipos de cambio en vivo (base USD) con respaldo sin conexión.",
+    tip: "Las tasas se actualizan automáticamente. Verifica antes de decidir."
+  },
+  timezone: {
+    label: "Zona Horaria",
+    subtitle: "Conversiones de ciudad y UTC con horario de verano usando zonas IANA.",
+    tip: "La conversión usa los desfases actuales de horario de verano por ciudad."
+  },
+  area: {
+    label: "Área",
+    subtitle: "Conversión de área entre sistemas métrico e imperial.",
+    tip: "Ideal para planos, terrenos y mediciones de mapas."
+  },
+  data: {
+    label: "Datos Digitales",
+    subtitle: "Conversión de almacenamiento digital con factores binarios.",
+    tip: "Úsalo para estimar tamaños de archivo y planificación de almacenamiento."
+  }
+};
+
+function i18n(enText, esText) {
+  return IS_ES ? esText : enText;
+}
+
+function getCategoryLabel(category) {
+  return IS_ES ? CATEGORY_I18N[category.id]?.label || category.label : category.label;
+}
+
+function getCategorySubtitle(category) {
+  return IS_ES ? CATEGORY_I18N[category.id]?.subtitle || category.subtitle : category.subtitle;
+}
+
+function getCategoryTip(category) {
+  return IS_ES ? CATEGORY_I18N[category.id]?.tip || category.tip : category.tip;
+}
+
 const currencyDefaultsUsdPerUnit = {
   usd: 1,
   eur: 1.09,
@@ -236,7 +298,7 @@ function normalizeAlias(raw) {
 }
 
 function formatNumber(value) {
-  if (!Number.isFinite(value)) return "Invalid";
+  if (!Number.isFinite(value)) return i18n("Invalid", "Inválido");
   const absolute = Math.abs(value);
   if (absolute > 0 && (absolute < 0.000001 || absolute > 1e9)) {
     return value.toExponential(4);
@@ -398,7 +460,7 @@ function renderCategoryChips() {
   row.innerHTML = categories
     .map(
       (category) =>
-        `<button type="button" class="category-chip ${category.id === state.activeCategoryId ? "active" : ""}" data-category-id="${category.id}">${category.label}</button>`
+        `<button type="button" class="category-chip ${category.id === state.activeCategoryId ? "active" : ""}" data-category-id="${category.id}">${getCategoryLabel(category)}</button>`
     )
     .join("");
 
@@ -442,9 +504,9 @@ function setActiveCategory(categoryId, options = {}) {
   const nextValue = Number.isFinite(options.value) ? options.value : category.defaultValue ?? 1;
   valueInput.value = `${nextValue}`;
 
-  document.getElementById("converter-subtitle").textContent = category.subtitle;
+  document.getElementById("converter-subtitle").textContent = getCategorySubtitle(category);
   if (tipLine) {
-    tipLine.textContent = category.tip;
+    tipLine.textContent = getCategoryTip(category);
   }
   updateFavoriteVisual();
   runConversion(false);
@@ -556,15 +618,21 @@ function convertValue(category, value, fromKey, toKey) {
 }
 
 function formatValueForCategory(category, value) {
-  if (!Number.isFinite(value)) return "Invalid";
+  if (!Number.isFinite(value)) return i18n("Invalid", "Inválido");
   if (category.kind === "timezone") return formatTimeOfDay(value);
   return formatNumber(value);
 }
 
 function updateHeaderAndInfo(category, fromUnit, toUnit, sampleConverted) {
-  const title = `${cleanUnitTitle(fromUnit.label)} to ${cleanUnitTitle(toUnit.label)} Converter`;
+  const title = i18n(
+    `${cleanUnitTitle(fromUnit.label)} to ${cleanUnitTitle(toUnit.label)} Converter`,
+    `Convertidor de ${cleanUnitTitle(fromUnit.label)} a ${cleanUnitTitle(toUnit.label)}`
+  );
   document.getElementById("converter-title").textContent = title;
-  document.getElementById("how-title").textContent = `How to convert ${cleanUnitTitle(fromUnit.label).toLowerCase()} to ${cleanUnitTitle(toUnit.label).toLowerCase()}?`;
+  document.getElementById("how-title").textContent = i18n(
+    `How to convert ${cleanUnitTitle(fromUnit.label).toLowerCase()} to ${cleanUnitTitle(toUnit.label).toLowerCase()}?`,
+    `¿Cómo convertir ${cleanUnitTitle(fromUnit.label).toLowerCase()} a ${cleanUnitTitle(toUnit.label).toLowerCase()}?`
+  );
 
   const ratio = convertValue(category, 1, fromUnit.key, toUnit.key);
   const formulaLine = document.getElementById("formula-line");
@@ -572,23 +640,47 @@ function updateHeaderAndInfo(category, fromUnit, toUnit, sampleConverted) {
   const howText = document.getElementById("how-text");
 
   if (category.kind === "temperature") {
-    formulaLine.textContent = "formula : uses standard temperature conversion formulas";
-    formulaChip.textContent = `${cleanUnitTitle(toUnit.label).toLowerCase()} from ${cleanUnitTitle(fromUnit.label).toLowerCase()} using canonical temperature equations`;
+    formulaLine.textContent = i18n(
+      "formula : uses standard temperature conversion formulas",
+      "fórmula : usa fórmulas estándar de conversión de temperatura"
+    );
+    formulaChip.textContent = i18n(
+      `${cleanUnitTitle(toUnit.label).toLowerCase()} from ${cleanUnitTitle(fromUnit.label).toLowerCase()} using canonical temperature equations`,
+      `${cleanUnitTitle(toUnit.label).toLowerCase()} desde ${cleanUnitTitle(fromUnit.label).toLowerCase()} usando ecuaciones canónicas de temperatura`
+    );
     howText.textContent =
-      "Temperature conversion is non-linear, so formulas adapt automatically to the selected unit pair.";
+      i18n(
+        "Temperature conversion is non-linear, so formulas adapt automatically to the selected unit pair.",
+        "La conversión de temperatura es no lineal, por lo que las fórmulas se adaptan automáticamente al par de unidades seleccionado."
+      );
   } else if (category.kind === "timezone") {
     const now = new Date();
     const fromOffset = getTimeZoneOffsetMinutes(fromUnit.tz, now) / 60;
     const toOffset = getTimeZoneOffsetMinutes(toUnit.tz, now) / 60;
-    formulaLine.textContent = `formula : local target = source + (${formatUtcOffset(toOffset)} - ${formatUtcOffset(fromOffset)})`;
-    formulaChip.textContent = `target hour = source hour + (${formatUtcOffset(toOffset)} - ${formatUtcOffset(fromOffset)})`;
+    formulaLine.textContent = i18n(
+      `formula : local target = source + (${formatUtcOffset(toOffset)} - ${formatUtcOffset(fromOffset)})`,
+      `fórmula : hora local destino = origen + (${formatUtcOffset(toOffset)} - ${formatUtcOffset(fromOffset)})`
+    );
+    formulaChip.textContent = i18n(
+      `target hour = source hour + (${formatUtcOffset(toOffset)} - ${formatUtcOffset(fromOffset)})`,
+      `hora destino = hora origen + (${formatUtcOffset(toOffset)} - ${formatUtcOffset(fromOffset)})`
+    );
     howText.textContent =
-      "Timezone conversion is DST-aware and uses current IANA city offsets for each selected location.";
+      i18n(
+        "Timezone conversion is DST-aware and uses current IANA city offsets for each selected location.",
+        "La conversión de zona horaria considera el horario de verano y usa los desfases IANA actuales para cada ciudad seleccionada."
+      );
   } else {
-    formulaLine.textContent = `formula : 1 ${fromUnit.key} = ${formatNumber(ratio)} ${toUnit.key}`;
+    formulaLine.textContent = i18n(
+      `formula : 1 ${fromUnit.key} = ${formatNumber(ratio)} ${toUnit.key}`,
+      `fórmula : 1 ${fromUnit.key} = ${formatNumber(ratio)} ${toUnit.key}`
+    );
     formulaChip.textContent = `${cleanUnitTitle(toUnit.label).toLowerCase()} = ${cleanUnitTitle(fromUnit.label).toLowerCase()} × ${formatNumber(ratio)}`;
     howText.textContent =
-      `To convert from ${cleanUnitTitle(fromUnit.label).toLowerCase()} to ${cleanUnitTitle(toUnit.label).toLowerCase()}, multiply by the conversion ratio.`;
+      i18n(
+        `To convert from ${cleanUnitTitle(fromUnit.label).toLowerCase()} to ${cleanUnitTitle(toUnit.label).toLowerCase()}, multiply by the conversion ratio.`,
+        `Para convertir de ${cleanUnitTitle(fromUnit.label).toLowerCase()} a ${cleanUnitTitle(toUnit.label).toLowerCase()}, multiplica por la razón de conversión.`
+      );
   }
 
   document.getElementById("ref-col-a").textContent = fromUnit.label;
@@ -611,13 +703,13 @@ function updateHeaderAndInfo(category, fromUnit, toUnit, sampleConverted) {
 function renderMultiTarget(result) {
   const body = document.getElementById("multi-target-body");
   if (!result) {
-    body.innerHTML = '<tr><td colspan="2">Results will appear after conversion.</td></tr>';
+    body.innerHTML = `<tr><td colspan="2">${i18n("Results will appear after conversion.", "Los resultados aparecerán después de convertir.")}</td></tr>`;
     return;
   }
 
   const category = categoriesById.get(result.categoryId);
   if (!category) {
-    body.innerHTML = '<tr><td colspan="2">Category unavailable.</td></tr>';
+    body.innerHTML = `<tr><td colspan="2">${i18n("Category unavailable.", "Categoría no disponible.")}</td></tr>`;
     return;
   }
 
@@ -692,21 +784,22 @@ function pushHistory(entryText) {
 function relativeTime(epochMs) {
   const diffMs = Date.now() - epochMs;
   const minutes = Math.floor(diffMs / 60000);
-  if (minutes <= 0) return "just now";
-  if (minutes === 1) return "1 min ago";
-  if (minutes < 60) return `${minutes} mins ago`;
+  if (minutes <= 0) return i18n("just now", "justo ahora");
+  if (minutes === 1) return i18n("1 min ago", "hace 1 min");
+  if (minutes < 60) return i18n(`${minutes} mins ago`, `hace ${minutes} min`);
   const hours = Math.floor(minutes / 60);
-  if (hours === 1) return "1 hour ago";
-  if (hours < 24) return `${hours} hours ago`;
+  if (hours === 1) return i18n("1 hour ago", "hace 1 hora");
+  if (hours < 24) return i18n(`${hours} hours ago`, `hace ${hours} horas`);
   const days = Math.floor(hours / 24);
-  return days === 1 ? "1 day ago" : `${days} days ago`;
+  if (days === 1) return i18n("1 day ago", "hace 1 día");
+  return i18n(`${days} days ago`, `hace ${days} días`);
 }
 
 function renderHistory() {
   const list = document.getElementById("history-list");
   if (!list) return;
   if (!state.history.length) {
-    list.innerHTML = '<li class="history-empty">Conversions will appear here.</li>';
+    list.innerHTML = `<li class="history-empty">${i18n("Conversions will appear here.", "Las conversiones aparecerán aquí.")}</li>`;
     return;
   }
 
@@ -770,7 +863,7 @@ function getCurrentConversionConfig() {
     fromKey,
     toKey,
     value: Number.isFinite(value) ? value : category.defaultValue ?? 1,
-    name: `${category.label}: ${cleanUnitTitle(fromUnit.label)} → ${cleanUnitTitle(toUnit.label)}`
+    name: `${getCategoryLabel(category)}: ${cleanUnitTitle(fromUnit.label)} → ${cleanUnitTitle(toUnit.label)}`
   };
 }
 
@@ -778,7 +871,7 @@ function renderWorkflows() {
   const list = document.getElementById("workflow-list");
   if (!list) return;
   if (!state.workflows.length) {
-    list.innerHTML = '<li class="history-empty">Saved presets will appear here.</li>';
+    list.innerHTML = `<li class="history-empty">${i18n("Saved presets will appear here.", "Los ajustes guardados aparecerán aquí.")}</li>`;
     return;
   }
 
@@ -787,10 +880,10 @@ function renderWorkflows() {
       (workflow) => `<li class="workflow-item">
         <div>
           <p class="history-main">${escapeHtml(workflow.name)}</p>
-          <p class="history-time">Default: ${escapeHtml(formatNumber(workflow.value))}</p>
+          <p class="history-time">${i18n("Default", "Predeterminado")}: ${escapeHtml(formatNumber(workflow.value))}</p>
         </div>
         <div class="workflow-actions">
-          <button type="button" class="workflow-btn" data-action="apply" data-id="${workflow.id}">Use</button>
+          <button type="button" class="workflow-btn" data-action="apply" data-id="${workflow.id}">${i18n("Use", "Usar")}</button>
           <button type="button" class="workflow-btn" data-action="remove" data-id="${workflow.id}">✕</button>
         </div>
       </li>`
@@ -829,7 +922,7 @@ function saveCurrentWorkflow() {
 
   const resultLine = document.getElementById("quick-result");
   resultLine.className = "quick-result success";
-  resultLine.textContent = "Workflow saved.";
+  resultLine.textContent = i18n("Workflow saved.", "Flujo guardado.");
 }
 
 function applyWorkflowById(workflowId) {
@@ -844,7 +937,7 @@ function applyWorkflowById(workflowId) {
 
   const resultLine = document.getElementById("quick-result");
   resultLine.className = "quick-result success";
-  resultLine.textContent = `Applied workflow: ${workflow.name}`;
+  resultLine.textContent = i18n(`Applied workflow: ${workflow.name}`, `Flujo aplicado: ${workflow.name}`);
 }
 
 function removeWorkflowById(workflowId) {
@@ -862,7 +955,7 @@ function resolveQuickUnits(fromToken, toToken) {
   const toCandidates = findCandidates(toToken);
 
   if (!fromCandidates.length || !toCandidates.length) {
-    return { error: "Unit not recognized. Try symbols like ft, m, lb, c, gb, usd, la, nyc." };
+    return { error: i18n("Unit not recognized. Try symbols like ft, m, lb, c, gb, usd, la, nyc.", "Unidad no reconocida. Prueba símbolos como ft, m, lb, c, gb, usd, la, nyc.") };
   }
 
   const matches = [];
@@ -888,10 +981,10 @@ function resolveQuickUnits(fromToken, toToken) {
   }
 
   if (!unique.length) {
-    return { error: "Those units are from different categories." };
+    return { error: i18n("Those units are from different categories.", "Esas unidades pertenecen a categorías diferentes.") };
   }
   if (unique.length > 1) {
-    return { error: "Request is ambiguous. Use explicit unit symbols." };
+    return { error: i18n("Request is ambiguous. Use explicit unit symbols.", "La solicitud es ambigua. Usa símbolos de unidad explícitos.") };
   }
   return unique[0];
 }
@@ -901,18 +994,18 @@ function getQuickSuggestions(raw) {
   const numericMatch = trimmed.match(/^-?\d+(?:\.\d+)?/);
   const valueToken = numericMatch ? numericMatch[0] : "10";
   const fallbacks = [
-    `${valueToken} ft to m`,
-    `${valueToken} kg to lb`,
-    `${valueToken} c to f`,
-    `${valueToken} usd to eur`,
-    `${valueToken} la to london`,
-    `${valueToken} gb to mb`
+    `${valueToken} ft ${QUICK_CONNECTOR} m`,
+    `${valueToken} kg ${QUICK_CONNECTOR} lb`,
+    `${valueToken} c ${QUICK_CONNECTOR} f`,
+    `${valueToken} usd ${QUICK_CONNECTOR} eur`,
+    `${valueToken} la ${QUICK_CONNECTOR} london`,
+    `${valueToken} gb ${QUICK_CONNECTOR} mb`
   ];
 
   if (!trimmed) return fallbacks;
 
   const suggestions = [];
-  const structureMatch = trimmed.match(/^(-?\d+(?:\.\d+)?)\s*([^\s]*)\s*(?:to|in|into|->)?\s*([^\s]*)$/i);
+  const structureMatch = trimmed.match(/^(-?\d+(?:\.\d+)?)\s*([^\s]*)\s*(?:to|in|into|->|a|en|hacia)?\s*([^\s]*)$/i);
   if (!structureMatch) {
     return fallbacks;
   }
@@ -936,7 +1029,7 @@ function getQuickSuggestions(raw) {
       });
 
       if (!targetUnits.length) continue;
-      suggestions.push(`${valueToken} ${fromUnit.key} to ${targetUnits[0].key}`);
+      suggestions.push(`${valueToken} ${fromUnit.key} ${QUICK_CONNECTOR} ${targetUnits[0].key}`);
     }
   }
 
@@ -975,14 +1068,17 @@ function handleQuickSubmit(event) {
 
   if (!raw) {
     resultLine.className = "quick-result error";
-    resultLine.textContent = 'Type a request like: "10kg to lbs"';
+    resultLine.textContent = i18n('Type a request like: "10kg to lbs"', 'Escribe una solicitud como: "10kg a lbs"');
     return;
   }
 
-  const match = raw.match(/^(-?\d+(?:\.\d+)?)\s*([^\s]+)\s*(?:to|in|into|->)\s*([^\s]+)$/i);
+  const match = raw.match(/^(-?\d+(?:\.\d+)?)\s*([^\s]+)\s*(?:to|in|into|->|a|en|hacia)\s*([^\s]+)$/i);
   if (!match) {
     resultLine.className = "quick-result error";
-    resultLine.textContent = "Format not recognized. Use: value unit to unit";
+    resultLine.textContent = i18n(
+      "Format not recognized. Use: value unit to unit",
+      "Formato no reconocido. Usa: valor unidad a unidad"
+    );
     return;
   }
 
@@ -1003,7 +1099,7 @@ function handleQuickSubmit(event) {
   const output = runConversion(true);
   if (!output) {
     resultLine.className = "quick-result error";
-    resultLine.textContent = "Unable to convert this request.";
+    resultLine.textContent = i18n("Unable to convert this request.", "No se pudo convertir esta solicitud.");
     return;
   }
 
@@ -1011,9 +1107,9 @@ function handleQuickSubmit(event) {
     const suffix =
       state.currency.source === "live"
         ? state.currency.date
-          ? ` (live rates: ${formatDate(state.currency.date)})`
-          : " (live rates)"
-        : " (offline fallback rates)";
+          ? i18n(` (live rates: ${formatDate(state.currency.date)})`, ` (tasas en vivo: ${formatDate(state.currency.date)})`)
+          : i18n(" (live rates)", " (tasas en vivo)")
+        : i18n(" (offline fallback rates)", " (tasas de respaldo sin conexión)");
     resultLine.className = "quick-result success";
     resultLine.textContent = `${output.output}${suffix}`;
   }
@@ -1026,16 +1122,19 @@ function updateFxStatus() {
   trustLine.className = "fx-trust";
 
   if (state.currency.loading) {
-    line.textContent = "Currency rates: updating live data...";
-    trustLine.textContent = "Source: Frankfurter API • Checking freshness...";
+    line.textContent = i18n("Currency rates: updating live data...", "Tasas de moneda: actualizando datos en vivo...");
+    trustLine.textContent = i18n("Source: Frankfurter API • Checking freshness...", "Fuente: API Frankfurter • Comprobando actualización...");
     return;
   }
 
   if (state.currency.source === "live") {
     line.classList.add("live");
     line.textContent = state.currency.date
-      ? `Currency rates: live (base USD, market date ${formatDate(state.currency.date)}).`
-      : "Currency rates: live (base USD).";
+      ? i18n(
+        `Currency rates: live (base USD, market date ${formatDate(state.currency.date)}).`,
+        `Tasas de moneda: en vivo (base USD, fecha de mercado ${formatDate(state.currency.date)}).`
+      )
+      : i18n("Currency rates: live (base USD).", "Tasas de moneda: en vivo (base USD).");
 
     let stale = false;
     let ageLabel = "";
@@ -1049,21 +1148,30 @@ function updateFxStatus() {
     }
 
     trustLine.classList.add(stale ? "warn" : "good");
-    trustLine.textContent = `Source: ${state.currency.provider}${state.currency.date ? ` • Updated ${formatDate(state.currency.date)}` : ""}${ageLabel} • ${stale ? "Stale" : "Fresh"}`;
+    trustLine.textContent = i18n(
+      `Source: ${state.currency.provider}${state.currency.date ? ` • Updated ${formatDate(state.currency.date)}` : ""}${ageLabel} • ${stale ? "Stale" : "Fresh"}`,
+      `Fuente: ${state.currency.provider}${state.currency.date ? ` • Actualizado ${formatDate(state.currency.date)}` : ""}${ageLabel} • ${stale ? "Desactualizado" : "Reciente"}`
+    );
     return;
   }
 
   if (state.currency.error) {
     line.classList.add("error");
-    line.textContent = "Currency rates: offline fallback active.";
+    line.textContent = i18n("Currency rates: offline fallback active.", "Tasas de moneda: respaldo sin conexión activo.");
     trustLine.classList.add("warn");
-    trustLine.textContent = "Source: Offline fallback table • Live feed unavailable.";
+    trustLine.textContent = i18n(
+      "Source: Offline fallback table • Live feed unavailable.",
+      "Fuente: tabla de respaldo sin conexión • Fuente en vivo no disponible."
+    );
     return;
   }
 
-  line.textContent = "Currency rates: offline preset rates active.";
+  line.textContent = i18n(
+    "Currency rates: offline preset rates active.",
+    "Tasas de moneda: tasas predefinidas sin conexión activas."
+  );
   trustLine.classList.add("warn");
-  trustLine.textContent = "Source: Offline preset table.";
+  trustLine.textContent = i18n("Source: Offline preset table.", "Fuente: tabla predefinida sin conexión.");
 }
 
 function applyCurrencyFactors(usdPerUnitMap) {
@@ -1161,7 +1269,11 @@ function updateUrlFromCurrentState() {
 
 function setRuntimeSeoMeta() {
   const isHttpPage = window.location.protocol === "http:" || window.location.protocol === "https:";
-  const canonicalUrl = isHttpPage ? `${window.location.origin}${window.location.pathname}` : "/";
+  const pathname = window.location.pathname || "/";
+  const canonicalPath = pathname === "/index.html" ? "/" : pathname;
+  const canonicalUrl = isHttpPage ? `${window.location.origin}${canonicalPath}` : "/";
+  const enUrl = isHttpPage ? `${window.location.origin}/` : "/";
+  const esUrl = isHttpPage ? `${window.location.origin}/index-es.html` : "/index-es.html";
 
   const canonicalLink = document.getElementById("canonical-link");
   if (canonicalLink) {
@@ -1170,12 +1282,17 @@ function setRuntimeSeoMeta() {
 
   const hreflangUs = document.getElementById("hreflang-en-us");
   if (hreflangUs) {
-    hreflangUs.setAttribute("href", canonicalUrl);
+    hreflangUs.setAttribute("href", enUrl);
+  }
+
+  const hreflangEs = document.getElementById("hreflang-es");
+  if (hreflangEs) {
+    hreflangEs.setAttribute("href", esUrl);
   }
 
   const hreflangDefault = document.getElementById("hreflang-default");
   if (hreflangDefault) {
-    hreflangDefault.setAttribute("href", canonicalUrl);
+    hreflangDefault.setAttribute("href", enUrl);
   }
 
   const ogUrl = document.getElementById("og-url");
@@ -1199,7 +1316,11 @@ function setRuntimeSeoMeta() {
     operatingSystem: "Any",
     url: canonicalUrl,
     description:
-      "Convert units, currencies, and time zones with utility tools for batch workflows, loan estimates, and design contrast checks.",
+      i18n(
+        "Convert units, currencies, and time zones with utility tools for batch workflows, loan estimates, and design contrast checks.",
+        "Convierte unidades, monedas y zonas horarias con herramientas para conversiones por lote, estimaciones de préstamos y comprobación de contraste de diseño."
+      ),
+    inLanguage: IS_ES ? "es" : "en-US",
     offers: {
       "@type": "Offer",
       price: "0",
@@ -1276,7 +1397,7 @@ function runBatchConversion() {
   const output = document.getElementById("batch-output");
 
   if (!category || !fromUnit || !toUnit) {
-    output.textContent = "Choose valid units first.";
+    output.textContent = i18n("Choose valid units first.", "Primero selecciona unidades válidas.");
     return;
   }
 
@@ -1287,19 +1408,22 @@ function runBatchConversion() {
     .slice(0, 200);
 
   if (!lines.length) {
-    output.textContent = "Add one value per line and run batch.";
+    output.textContent = i18n(
+      "Add one value per line and run batch.",
+      "Agrega un valor por línea y ejecuta el lote."
+    );
     return;
   }
 
   const rendered = lines.map((line) => {
     const value = parseBatchValue(line, category);
     if (value == null) {
-      return `${line} -> invalid`;
+      return `${line} -> ${i18n("invalid", "inválido")}`;
     }
 
     const converted = convertValue(category, value, fromKey, toKey);
     if (converted == null || Number.isNaN(converted)) {
-      return `${line} -> invalid`;
+      return `${line} -> ${i18n("invalid", "inválido")}`;
     }
 
     return `${formatValueForCategory(category, value)} -> ${formatValueForCategory(category, converted)}`;
@@ -1368,14 +1492,20 @@ function renderLoanCalculator() {
     monthlyEl.textContent = "$0.00";
     interestEl.textContent = "$0.00";
     totalEl.textContent = "$0.00";
-    noteEl.textContent = "Enter valid values to calculate a payment estimate.";
+    noteEl.textContent = i18n(
+      "Enter valid values to calculate a payment estimate.",
+      "Ingresa valores válidos para calcular una estimación de pago."
+    );
     return;
   }
 
   monthlyEl.textContent = formatCurrency(result.monthlyPayment);
   interestEl.textContent = formatCurrency(result.totalInterest);
   totalEl.textContent = formatCurrency(result.totalPaid);
-  noteEl.textContent = "Estimates exclude taxes, insurance, and fees.";
+  noteEl.textContent = i18n(
+    "Estimates exclude taxes, insurance, and fees.",
+    "Las estimaciones no incluyen impuestos, seguros ni cargos."
+  );
 }
 
 function bindLoanCalculator() {
@@ -1462,7 +1592,10 @@ function bindConverterControls() {
     await navigator.clipboard.writeText(result.output);
     const quickResult = document.getElementById("quick-result");
     quickResult.className = "quick-result success";
-    quickResult.textContent = "Copied current conversion to clipboard.";
+    quickResult.textContent = i18n(
+      "Copied current conversion to clipboard.",
+      "Conversión actual copiada al portapapeles."
+    );
   });
 
   document.getElementById("reset-btn").addEventListener("click", () => {
@@ -1470,7 +1603,7 @@ function bindConverterControls() {
     setActiveCategory(category.id);
     const quickResult = document.getElementById("quick-result");
     quickResult.className = "quick-result";
-    quickResult.textContent = "Result appears here.";
+    quickResult.textContent = i18n("Result appears here.", "El resultado aparece aquí.");
   });
 
   document.getElementById("favorite-btn").addEventListener("click", () => {
@@ -1484,7 +1617,10 @@ function bindConverterControls() {
     if (navigator.clipboard?.writeText) {
       await navigator.clipboard.writeText(url);
       quickResult.className = "quick-result success";
-      quickResult.textContent = "Share link copied to clipboard.";
+      quickResult.textContent = i18n(
+        "Share link copied to clipboard.",
+        "Enlace para compartir copiado al portapapeles."
+      );
       return;
     }
 
@@ -1916,7 +2052,7 @@ function buildTokenJsonExport(entries) {
 function buildFigmaExport(entries) {
   return JSON.stringify(
     {
-      name: "QuickToolApp Palette",
+      name: i18n("QuickToolApp Palette", "Paleta de QuickToolApp"),
       mode: "Default",
       variables: entries.map((entry) => ({
         name: entry.name,
@@ -1937,14 +2073,23 @@ async function copyExportText(text, label) {
   try {
     if (navigator.clipboard?.writeText) {
       await navigator.clipboard.writeText(text);
-      status.textContent = `${label} copied to clipboard.`;
+      status.textContent = i18n(
+        `${label} copied to clipboard.`,
+        `${label} copiado al portapapeles.`
+      );
       return;
     }
 
     console.log(`[${label}]\n${text}`);
-    status.textContent = `${label} logged to console (clipboard unavailable).`;
+    status.textContent = i18n(
+      `${label} logged to console (clipboard unavailable).`,
+      `${label} enviado a la consola (portapapeles no disponible).`
+    );
   } catch {
-    status.textContent = `${label} export failed. Try again.`;
+    status.textContent = i18n(
+      `${label} export failed. Try again.`,
+      `La exportación de ${label} falló. Inténtalo de nuevo.`
+    );
   }
 }
 
@@ -1995,8 +2140,15 @@ function renderPalette() {
 
   const recommendationLine = document.getElementById("contrast-recommendation");
   if (recommendationLine) {
-    const rating = recommendation.ratio >= 4.5 ? "Good" : recommendation.ratio >= 3 ? "Mid" : "Bad";
-    recommendationLine.textContent = `Recommended (${rating}) for ${formatSchemeLabel(state.palette.scheme)}: ${recommendation.text} on ${recommendation.background}`;
+    const rating = recommendation.ratio >= 4.5
+      ? i18n("Good", "Bueno")
+      : recommendation.ratio >= 3
+        ? i18n("Mid", "Medio")
+        : i18n("Bad", "Bajo");
+    recommendationLine.textContent = i18n(
+      `Recommended (${rating}) for ${formatSchemeLabel(state.palette.scheme)}: ${recommendation.text} on ${recommendation.background}`,
+      `Recomendado (${rating}) para ${formatSchemeLabel(state.palette.scheme)}: ${recommendation.text} sobre ${recommendation.background}`
+    );
   }
 
   updateContrastPreview();
@@ -2075,18 +2227,18 @@ function updateContrastPreview() {
   const livePanel = document.getElementById("contrast-live-panel");
   const sample = document.getElementById("contrast-live-sample");
 
-  let rating = "Bad";
+  let rating = i18n("Bad", "Bajo");
   let ratingColor = "#991b1b";
   let borderColor = "rgba(153, 27, 27, 0.35)";
   let badgeBg = "rgba(254, 242, 242, 0.82)";
 
   if (ratio >= 4.5) {
-    rating = "Good";
+    rating = i18n("Good", "Bueno");
     ratingColor = "#166534";
     borderColor = "rgba(22, 101, 52, 0.35)";
     badgeBg = "rgba(236, 253, 245, 0.82)";
   } else if (ratio >= 3) {
-    rating = "Mid";
+    rating = i18n("Mid", "Medio");
     ratingColor = "#9a3412";
     borderColor = "rgba(154, 52, 18, 0.35)";
     badgeBg = "rgba(255, 247, 237, 0.82)";
@@ -2105,7 +2257,10 @@ function updateContrastPreview() {
   ratioElement.style.borderColor = borderColor;
   ratioElement.style.background = badgeBg;
 
-  wcagElement.textContent = `WCAG: Normal ${normalAA ? "AA pass" : "AA fail"}${normalAAA ? " / AAA pass" : ""} • Large ${largeAA ? "AA pass" : "AA fail"}${largeAAA ? " / AAA pass" : ""}`;
+  wcagElement.textContent = i18n(
+    `WCAG: Normal ${normalAA ? "AA pass" : "AA fail"}${normalAAA ? " / AAA pass" : ""} • Large ${largeAA ? "AA pass" : "AA fail"}${largeAAA ? " / AAA pass" : ""}`,
+    `WCAG: Normal ${normalAA ? "AA aprueba" : "AA falla"}${normalAAA ? " / AAA aprueba" : ""} • Grande ${largeAA ? "AA aprueba" : "AA falla"}${largeAAA ? " / AAA aprueba" : ""}`
+  );
   wcagElement.style.color = normalAA ? "#166534" : largeAA ? "#9a3412" : "#991b1b";
 
   livePanel.style.backgroundColor = bgColor;

@@ -1,17 +1,17 @@
 <!doctype html>
-<html lang="en">
+<html lang="es">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>QuickToolApp | Unit, Currency, Time & Loan Tools</title>
+    <title>QuickToolApp | Herramientas de unidades, moneda, tiempo y préstamos</title>
     <meta
       name="description"
-      content="QuickToolApp helps you convert units, currencies, time zones, and loan estimates instantly with smart categories, batch conversion, and design contrast tools."
+      content="QuickToolApp te ayuda a convertir unidades, monedas, zonas horarias y estimaciones de préstamos al instante con categorías inteligentes, conversiones por lote y herramientas de contraste."
     />
     <meta name="robots" content="index, follow, max-image-preview:large" />
     <meta name="theme-color" content="#3B82F6" />
     <meta name="google-adsense-account" content="ca-pub-3729047713852037" />
-    <link rel="canonical" href="https://quicktoolapp.com/" id="canonical-link" />
+    <link rel="canonical" href="https://quicktoolapp.com/index-es.html" id="canonical-link" />
     <link rel="alternate" hreflang="en-us" href="https://quicktoolapp.com/" id="hreflang-en-us" />
     <link rel="alternate" hreflang="es" href="https://quicktoolapp.com/index-es.html" id="hreflang-es" />
     <link rel="alternate" hreflang="x-default" href="https://quicktoolapp.com/" id="hreflang-default" />
@@ -20,15 +20,15 @@
     <meta property="og:title" content="QuickToolApp" />
     <meta
       property="og:description"
-      content="Smart conversion for units, currency, time zones, and loan planning."
+      content="Conversión inteligente de unidades, moneda, zonas horarias y planificación de préstamos."
     />
-    <meta property="og:url" content="https://quicktoolapp.com/" id="og-url" />
+    <meta property="og:url" content="https://quicktoolapp.com/index-es.html" id="og-url" />
     <meta property="og:image" content="https://quicktoolapp.com/website.png" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="QuickToolApp" />
     <meta
       name="twitter:description"
-      content="Smart conversion for units, currency, time zones, and loan planning."
+      content="Conversión inteligente de unidades, moneda, zonas horarias y planificación de préstamos."
     />
     <meta name="twitter:image" content="https://quicktoolapp.com/website.png" />
     <link rel="icon" type="image/svg+xml" href="favicon.svg" />
@@ -46,8 +46,8 @@
         "name": "QuickToolApp",
         "applicationCategory": "UtilitiesApplication",
         "operatingSystem": "Any",
-        "url": "https://quicktoolapp.com/",
-        "description": "Convert units, currencies, and time zones with utility tools for batch workflows, loan estimates, and design contrast checks.",
+        "url": "https://quicktoolapp.com/index-es.html",
+        "description": "Convierte unidades, monedas y zonas horarias con herramientas para conversiones por lote, estimaciones de préstamos y comprobación de contraste de diseño.",
         "offers": {
           "@type": "Offer",
           "price": "0",
@@ -77,15 +77,15 @@
   </head>
   <body>
     <main class="site-shell">
-      <nav class="locale-switch" aria-label="Language switcher">
-        <a class="locale-link active" href="index.html" aria-current="page">English</a>
-        <a class="locale-link" href="index-es.html">Español</a>
+      <nav class="locale-switch" aria-label="Selector de idioma">
+        <a class="locale-link" href="index.html">English</a>
+        <a class="locale-link active" href="index-es.html" aria-current="page">Español</a>
       </nav>
 
       <header class="hero">
-        <h1>QuickToolApp: convert anything instantly.</h1>
+        <h1>QuickToolApp: convierte lo que sea al instante.</h1>
         <p class="hero-sub">
-          Natural language conversion for units, currency, and time.
+          Conversión en lenguaje natural para unidades, moneda y tiempo.
         </p>
 
         <form id="quick-form" class="quick-form" autocomplete="off">
@@ -94,52 +94,52 @@
             <input
               id="quick-input"
               type="text"
-              placeholder='Try "10kg to lbs" or "500 usd to eur"'
-              aria-label="Type conversion"
+              placeholder='Prueba "10kg a lbs" o "500 usd a eur"'
+              aria-label="Escribe la conversión"
             />
-            <button type="submit">Convert</button>
+            <button type="submit">Convertir</button>
           </div>
           <div id="quick-suggestions" class="quick-suggestions" hidden></div>
           <p id="quick-result" class="quick-result" aria-live="polite">
-            Result appears here.
+            El resultado aparece aquí.
           </p>
           <p id="fx-status" class="fx-status" aria-live="polite">
-            Currency rates: loading live data...
+            Tasas de moneda: cargando datos en vivo...
           </p>
           <p id="fx-trust" class="fx-trust" aria-live="polite">
-            Source and freshness details appear here.
+            Aquí aparecen la fuente y el estado de actualización.
           </p>
         </form>
 
         <div class="categories-line">
-          <span class="categories-label">Categories:</span>
+          <span class="categories-label">Categorías:</span>
           <div id="category-chip-row" class="category-chip-row"></div>
         </div>
       </header>
 
       <section class="converter-section">
-        <h2 id="converter-title">Feet to Meters Converter</h2>
+        <h2 id="converter-title">Convertidor de pies a metros</h2>
         <p id="converter-subtitle" class="converter-sub">
-          Fast, frictionless conversion for length measurements.
+          Conversión rápida y sin fricción para medidas de longitud.
         </p>
 
         <div class="converter-layout">
           <article class="converter-card">
             <div class="field-grid">
               <div class="field-block">
-                <label for="main-value">From</label>
+                <label for="main-value">De</label>
                 <div class="split-input">
                   <input id="main-value" type="number" step="any" value="10" />
                   <select id="from-unit"></select>
                 </div>
               </div>
 
-              <button id="swap-btn" class="swap-btn" type="button" aria-label="Swap units">
+              <button id="swap-btn" class="swap-btn" type="button" aria-label="Intercambiar unidades">
                 ↔
               </button>
 
               <div class="field-block">
-                <label for="converted-value">To</label>
+                <label for="converted-value">A</label>
                 <div class="split-input">
                   <input id="converted-value" type="text" readonly />
                   <select id="to-unit"></select>
@@ -147,41 +147,41 @@
               </div>
             </div>
 
-            <p id="formula-line" class="formula-line">formula : 1 ft = 0.3048 m</p>
+            <p id="formula-line" class="formula-line">fórmula : 1 ft = 0.3048 m</p>
 
             <div class="action-row">
-              <button id="convert-btn" type="button" class="primary-btn">Convert Now</button>
-              <button id="copy-btn" type="button" class="icon-btn" aria-label="Copy result">
+              <button id="convert-btn" type="button" class="primary-btn">Convertir ahora</button>
+              <button id="copy-btn" type="button" class="icon-btn" aria-label="Copiar resultado">
                 ⧉
               </button>
-              <button id="reset-btn" type="button" class="icon-btn" aria-label="Reset">
+              <button id="reset-btn" type="button" class="icon-btn" aria-label="Reiniciar">
                 ↻
               </button>
-              <button id="favorite-btn" type="button" class="icon-btn" aria-label="Favorite">
+              <button id="favorite-btn" type="button" class="icon-btn" aria-label="Favorito">
                 ☆
               </button>
-              <button id="share-btn" type="button" class="icon-btn" aria-label="Share link">
+              <button id="share-btn" type="button" class="icon-btn" aria-label="Compartir enlace">
                 ↗
               </button>
             </div>
 
             <div class="in-card-info-grid">
               <article class="inline-info-pane">
-                <h3 id="how-title">How to convert feet to meters?</h3>
+                <h3 id="how-title">¿Cómo convertir pies a metros?</h3>
                 <p id="how-text">
-                  To convert a length measurement from feet to meters, multiply the length by
-                  the conversion ratio.
+                  Para convertir una medida de longitud de pies a metros, multiplica la longitud
+                  por la razón de conversión.
                 </p>
-                <div id="how-formula" class="formula-chip">meters = feet × 0.3048</div>
+                <div id="how-formula" class="formula-chip">metros = pies × 0.3048</div>
               </article>
 
               <article class="inline-info-pane">
-                <h3>Quick Reference Table</h3>
+                <h3>Tabla de referencia rápida</h3>
                 <table class="ref-table">
                   <thead>
                     <tr>
-                      <th id="ref-col-a">Feet (ft)</th>
-                      <th id="ref-col-b">Meters (m)</th>
+                      <th id="ref-col-a">Pies (ft)</th>
+                      <th id="ref-col-b">Metros (m)</th>
                     </tr>
                   </thead>
                   <tbody id="reference-body"></tbody>
@@ -193,39 +193,39 @@
           <aside class="right-column">
             <article class="history-card loan-card">
               <div class="card-head">
-                <h3>Loan Calculator</h3>
-                <button id="loan-reset-btn" type="button">Reset</button>
+                <h3>Calculadora de préstamos</h3>
+                <button id="loan-reset-btn" type="button">Reiniciar</button>
               </div>
 
               <div class="loan-grid">
                 <label class="loan-field">
-                  Loan Amount
+                  Monto del préstamo
                   <input id="loan-amount" type="number" min="0" step="1000" value="250000" />
                 </label>
 
                 <label class="loan-field">
-                  Interest (% APR)
+                  Interés (% APR)
                   <input id="loan-rate" type="number" min="0" step="0.01" value="6.5" />
                 </label>
 
                 <label class="loan-field">
-                  Term (Years)
+                  Plazo (años)
                   <input id="loan-years" type="number" min="1" step="1" value="30" />
                 </label>
               </div>
 
               <button id="loan-calc-btn" type="button" class="primary-btn loan-calc-btn">
-                Calculate
+                Calcular
               </button>
 
               <div class="loan-summary">
-                <p><span>Monthly</span><strong id="loan-monthly">$0.00</strong></p>
-                <p><span>Total Interest</span><strong id="loan-interest">$0.00</strong></p>
-                <p><span>Total Paid</span><strong id="loan-total">$0.00</strong></p>
+                <p><span>Mensual</span><strong id="loan-monthly">$0.00</strong></p>
+                <p><span>Interés total</span><strong id="loan-interest">$0.00</strong></p>
+                <p><span>Total pagado</span><strong id="loan-total">$0.00</strong></p>
               </div>
 
               <p id="loan-note" class="loan-note">
-                Estimates exclude taxes, insurance, and fees.
+                Las estimaciones no incluyen impuestos, seguros ni cargos.
               </p>
             </article>
           </aside>
@@ -234,15 +234,15 @@
         <div class="utility-grid">
           <article class="info-card multi-target-card">
             <div class="card-head">
-              <h3>Multi-Target</h3>
-              <button id="refresh-multi-target" type="button">Refresh</button>
+              <h3>Múltiples destinos</h3>
+              <button id="refresh-multi-target" type="button">Actualizar</button>
             </div>
-            <p class="batch-help">Top equivalent units for the active value.</p>
+            <p class="batch-help">Unidades equivalentes principales para el valor activo.</p>
             <table class="ref-table multi-target-table">
               <thead>
                 <tr>
-                  <th>Unit</th>
-                  <th>Result</th>
+                  <th>Unidad</th>
+                  <th>Resultado</th>
                 </tr>
               </thead>
               <tbody id="multi-target-body"></tbody>
@@ -251,44 +251,44 @@
 
           <article class="info-card batch-card">
             <div class="card-head">
-              <h3>Batch Convert</h3>
-              <button id="run-batch-btn" type="button">Run</button>
+              <h3>Conversión por lote</h3>
+              <button id="run-batch-btn" type="button">Ejecutar</button>
             </div>
             <p class="batch-help">
-              One value per line. Uses current from/to units. Tip: Cmd/Ctrl + Enter to run.
+              Un valor por línea. Usa las unidades actuales de origen/destino. Consejo: Cmd/Ctrl + Enter para ejecutar.
             </p>
             <textarea
               id="batch-input"
               class="batch-input"
               placeholder="10&#10;25.5&#10;100"
             ></textarea>
-            <pre id="batch-output" class="batch-output">Batch results appear here.</pre>
+            <pre id="batch-output" class="batch-output">Los resultados del lote aparecen aquí.</pre>
           </article>
         </div>
       </section>
 
       <section class="design-section" id="design-tools">
-        <h2>Design</h2>
+        <h2>Diseño</h2>
         <p class="design-sub">
-          A frictionless component library designed for high-performance unit conversion.
-          Focused on speed, accessibility, and visual clarity.
+          Una librería de componentes sin fricción diseñada para conversiones de alto rendimiento.
+          Enfocada en velocidad, accesibilidad y claridad visual.
         </p>
 
         <div class="design-label">
           <span class="label-dot"></span>
-          <h3>Color Theory</h3>
+          <h3>Teoría del color</h3>
         </div>
 
         <div class="design-grid-top">
           <article class="panel color-panel">
-            <p class="panel-kicker">COLOR PALETTE</p>
+            <p class="panel-kicker">PALETA DE COLOR</p>
             <p class="palette-intro">
-              Pick a primary color, choose a harmony, and generate accessible combinations.
+              Elige un color principal, selecciona una armonía y genera combinaciones accesibles.
             </p>
 
             <div class="palette-controls">
               <label class="palette-control">
-                Primary
+                Primario
                 <input id="palette-primary" type="color" value="#3B82F6" />
               </label>
 
@@ -298,23 +298,23 @@
               </label>
 
               <label class="palette-control palette-control-wide">
-                Scheme
+                Esquema
                 <select id="palette-scheme">
-                  <option value="monochromatic">Monochromatic</option>
-                  <option value="analogous">Analogous</option>
-                  <option value="complementary">Complementary</option>
-                  <option value="split-complementary">Split Complementary</option>
-                  <option value="triadic">Triadic</option>
-                  <option value="tetradic">Tetradic</option>
-                  <option value="square">Square (Other)</option>
-                  <option value="compound">Compound (Other)</option>
+                  <option value="monochromatic">Monocromático</option>
+                  <option value="analogous">Análogo</option>
+                  <option value="complementary">Complementario</option>
+                  <option value="split-complementary">Complementario dividido</option>
+                  <option value="triadic">Triádico</option>
+                  <option value="tetradic">Tetrádico</option>
+                  <option value="square">Cuadrado (Otro)</option>
+                  <option value="compound">Compuesto (Otro)</option>
                 </select>
               </label>
             </div>
 
             <div id="palette-swatches" class="palette-swatches"></div>
             <button id="generate-palette" type="button" class="subtle-btn">
-              Generate Palette
+              Generar paleta
             </button>
             <div class="export-actions">
               <button id="export-css-btn" type="button" class="subtle-btn export-btn">CSS</button>
@@ -323,89 +323,89 @@
               <button id="export-figma-btn" type="button" class="subtle-btn export-btn">Figma</button>
             </div>
             <p id="export-status" class="palette-export-status">
-              Export helpers appear here.
+              Las ayudas de exportación aparecen aquí.
             </p>
           </article>
 
           <article class="panel contrast-live-panel" id="contrast-live-panel">
             <div class="contrast-live-top">
-              <p class="panel-kicker">VISUAL CONTRAST</p>
+              <p class="panel-kicker">CONTRASTE VISUAL</p>
               <div class="contrast-live-controls">
                 <label class="contrast-live-picker">
-                  Text
+                  Texto
                   <input id="contrast-text" type="color" value="#1E3A8A" />
                 </label>
 
                 <label class="contrast-live-picker">
-                  Background
+                  Fondo
                   <input id="contrast-bg" type="color" value="#DBEAFE" />
                 </label>
 
                 <p id="contrast-ratio" class="contrast-ratio-badge">Mid</p>
               </div>
               <p id="contrast-recommendation" class="contrast-recommendation">
-                Recommended combo will appear here.
+                Aquí aparecerá la combinación recomendada.
               </p>
               <p id="contrast-wcag" class="contrast-wcag">
-                WCAG labels appear here.
+                Aquí aparecen las etiquetas WCAG.
               </p>
             </div>
 
             <div class="contrast-live-sample" id="contrast-live-sample">
-              <p class="sample-xl">CONVERT EVERYTHING</p>
-              <p class="sample-lg">Convert Everything</p>
-              <p class="sample-md">convert everything</p>
+              <p class="sample-xl">CONVIERTE TODO</p>
+              <p class="sample-lg">Convierte todo</p>
+              <p class="sample-md">convierte todo</p>
               <p class="sample-sm">Aa Bb Cc 1234 !@#</p>
-              <p class="sample-xs">the quick brown fox jumps over the lazy dog.</p>
+              <p class="sample-xs">el veloz murciélago hindú comía feliz cardillo y kiwi.</p>
             </div>
           </article>
         </div>
       </section>
 
       <section class="seo-content" id="about-quicktoolapp">
-        <h2>How QuickToolApp Produces Reliable Results</h2>
+        <h2>Cómo QuickToolApp produce resultados confiables</h2>
         <p>
-          QuickToolApp was built for students, technicians, analysts, and everyday users who need
-          fast, verifiable conversion results. Instead of spreading work across multiple calculators,
-          this page keeps conversions, reference values, and method explanations in one place so the
-          result can be checked quickly before use in reports, homework, planning, and operations.
+          QuickToolApp fue creado para estudiantes, técnicos, analistas y usuarios que necesitan
+          conversiones rápidas y verificables. En lugar de usar varias calculadoras separadas,
+          esta página mantiene conversiones, valores de referencia y explicaciones del método en
+          un solo lugar para validar resultados antes de usarlos en reportes, estudios y operaciones.
         </p>
         <p>
-          The calculator supports length, weight, volume, temperature, area, digital data, timezone,
-          and currency conversion. Currency uses live market data through the Frankfurter API with a
-          fallback table if the feed is unavailable. Timezone calculations use IANA zone identifiers
-          and current daylight-saving offsets for each selected city.
+          La calculadora admite longitud, peso, volumen, temperatura, área, datos digitales,
+          zonas horarias y conversión de moneda. La moneda usa datos en vivo de la API Frankfurter
+          con una tabla de respaldo cuando la fuente no está disponible. Las zonas horarias usan
+          identificadores IANA y los desfases actuales por ciudad.
         </p>
         <p>
-          For every category, QuickToolApp shows formula guidance and quick reference rows so users
-          can validate output instead of relying on a single isolated number. The loan calculator
-          follows standard amortization math and returns monthly payment, total interest, and total
-          paid for the exact values entered by the user.
+          En cada categoría, QuickToolApp muestra guía de fórmula y tablas de referencia para que
+          puedas validar la salida en lugar de depender de un número aislado. La calculadora de
+          préstamos sigue la matemática estándar de amortización y devuelve pago mensual, interés
+          total y total pagado según los valores ingresados.
         </p>
         <p>
-          The interface is optimized for desktop and mobile with readable labels, responsive layout,
-          keyboard-friendly inputs, and fast batch conversion for repeated tasks. Design utilities
-          are included for accessibility workflows, including contrast review and exportable palette
-          outputs that can be reused in CSS, JSON, and design tooling.
+          La interfaz está optimizada para escritorio y móvil con etiquetas legibles, diseño
+          adaptable, entradas amigables con teclado y conversión por lote para tareas repetidas.
+          También incluye utilidades de diseño para accesibilidad, como revisión de contraste y
+          exportación de paletas reutilizables en CSS, JSON y herramientas de diseño.
         </p>
         <p>
-          This site is independently published and maintained as a practical utility product. Legal
-          and publisher information is available through the footer links, including contact,
-          privacy, and terms pages that explain data handling, update practices, and use conditions.
+          Este sitio se publica y mantiene de forma independiente como una utilidad práctica.
+          La información legal y del editor está disponible en los enlaces del pie de página,
+          incluyendo contacto, privacidad y términos de uso.
         </p>
       </section>
 
       <footer class="site-footer" id="contact">
-        <h2>Publisher & Policies</h2>
+        <h2>Editor y políticas</h2>
         <p class="social-note">
-          QuickToolApp is an independent utility website. Use the links below for ownership,
-          policy, and contact information.
+          QuickToolApp es un sitio de utilidades independiente. Usa estos enlaces para información
+          de propiedad, políticas y contacto.
         </p>
-        <nav class="social-links" aria-label="Site links">
-          <a href="about.html">About</a>
-          <a href="privacy.html">Privacy</a>
-          <a href="terms.html">Terms</a>
-          <a href="contact.html">Contact</a>
+        <nav class="social-links" aria-label="Enlaces del sitio">
+          <a href="about.html">Acerca de</a>
+          <a href="privacy.html">Privacidad</a>
+          <a href="terms.html">Términos</a>
+          <a href="contact.html">Contacto</a>
         </nav>
       </footer>
     </main>
